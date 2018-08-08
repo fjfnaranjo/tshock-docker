@@ -1,0 +1,27 @@
+version: "3"
+services:
+  tshock:
+    build: .
+    ports:
+      - "7777"
+    volumes:
+      - config:/var/tshock/config
+      - world:/var/tshock/world
+      - log:/var/tshock/log
+    entrypoint:
+      - mono
+      - TerrariaServer.exe
+      - -world
+      - /var/tshock/world/${TSHOCK_WORLDNAME:-Docker}.wld
+      - -configpath
+      - /var/tshock/config
+      - -worldpath
+      - /var/tshock/world
+      - -logpath
+      - /var/tshock/log
+    restart: unless-stopped
+volumes:
+  config:
+  world:
+  log:
+
