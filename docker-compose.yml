@@ -1,7 +1,7 @@
-version: "3"
+version: "3.4"
 services:
   tshock:
-    build: .
+    image: fjfnaranjo/tshock:4.3.25
     ports:
       - "7777"
     volumes:
