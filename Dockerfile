@@ -1,14 +1,8 @@
-FROM debian:stretch-slim
+FROM mono:6.8
 
 RUN apt-get update \
     && apt-get install -y \
         unzip \
-        mono-runtime \
-        libmono-cil-dev \
-        #libmono-system-core4.0-cil \
-        #libmono-windowsbase4.0-cil \
-        #libmono-sqlite4.0-cil \
-        #libmono-system-serviceprocess4.0-cil \
     && rm -rf /var/lib/apt/lists/* /tmp/*1
 
 WORKDIR /tshock
