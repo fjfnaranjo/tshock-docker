@@ -7,11 +7,12 @@
 ## Useful commands to handle advance stuff
 ### Set vanilla permissions to group players
 * First, create the group players with the tShock command: /group add players .
+* Stop the server.
 * Run `docker run --rm -ti -v config:/tshock/config fjfnaranjo/tshock:4.3.26 /bin/bash`.
 * Then:
 ```
 apt-get update
-apt-get install sqlite3
+apt-get -y install sqlite3
 sqlite3 /tshock/config/tshock.sqlite
 UPDATE GroupList SET Commands='tshock.ignore.*,tshock.tp.rod,tshock.world.editspawn,tshock.npc.summonboss,tshock.world.movenpc,tshock.npc.hurttown,tshock.account.changepassword,tshock.world.modify' WHERE GroupName='players';
 .quit

@@ -7,6 +7,8 @@ cd "$(dirname "$0")"
 if [ "$#" -ne 1 ]
 then
 	echo "Backup wasn't specified."
+	echo "Available backups:"
+	ls backups/
 	exit 1
 fi
 if [ ! -d "backups/$1" ]
