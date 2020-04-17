@@ -3,12 +3,6 @@
 # chdir to script directory
 cd "$(dirname "$0")"
 
-# Ensure tShock service image and volumes
-docker-compose up --no-start
-
-# Stop the service
-docker-compose stop
-
 # Check if backup exists
 if [ "$#" -ne 1 ]
 then
@@ -24,10 +18,10 @@ then
 fi
 
 # Restore volumes content
-docker-compose run \
-	--rm \
-	--entrypoint "" \
+docker run --rm \
 	-v "`pwd`:/host" \
-	tshock \
-	cp -a "/host/backups/$1/." /var/tshock/
-
+	-v config:/tshock/config \
+	-v world:/tshock/world \
+	-v log:/tshock/log \
+	fjfnaranjo/tshock:4.3.26 \
+	cp -a "/host/backups/$1/." /tshock/

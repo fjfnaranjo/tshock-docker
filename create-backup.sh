@@ -1,33 +1,34 @@
 #!/bin/sh
 
-# chdir to script directory
+# chdir to this script directory
 cd "$(dirname "$0")"
 
-# Ensure tShock service image and volumes
-docker-compose up --no-start
-
-# Stop the service
-docker-compose stop
-
-# Ensure backups folder
+# Ensure backup directory
 mkdir -p backups
-
-# Calculate backup name
 BACKUP_NAME=`date -u +'%Y-%m-%d-%H-%M-%S'`
+mkdir -p backups/$BACKUP_NAME/config
+mkdir -p backups/$BACKUP_NAME/log
+mkdir -p backups/$BACKUP_NAME/world
 
-# Backup volumes content
-docker-compose run \
-	--rm \
-	--entrypoint "" \
+# Do backup
+docker run --rm \
 	-v "`pwd`:/host" \
-	tshock \
-	cp -R /var/tshock /host/backups/$BACKUP_NAME
+	-v config:/tshock/config \
+	fjfnaranjo/tshock:4.3.26 \
+	cp -a /tshock/config/. /host/backups/$BACKUP_NAME/config/
+docker run --rm \
+	-v "`pwd`:/host" \
+	-v log:/tshock/log \
+	fjfnaranjo/tshock:4.3.26 \
+	cp -a /tshock/log/. /host/backups/$BACKUP_NAME/log/
+docker run --rm \
+	-v "`pwd`:/host" \
+	-v world:/tshock/world \
+	fjfnaranjo/tshock:4.3.26 \
+	cp -a /tshock/world/. /host/backups/$BACKUP_NAME/world/
 
-# Backup folder permissions
-docker-compose run \
-	--rm \
-	--entrypoint "" \
+# Ensure regular user permissions for backup
+docker run --rm \
 	-v "`pwd`:/host" \
-	tshock \
+	fjfnaranjo/tshock:4.3.26 \
 	chown -R `id -u`:`id -g` /host/backups/$BACKUP_NAME
-

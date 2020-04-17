@@ -1,11 +1,9 @@
 #!/bin/sh
-
-# chdir to script directory
-cd "$(dirname "$0")"
-
-# Ensure tShock service image and volumes
-docker-compose up --no-start
-
-# Run tShock CLI
-docker-compose run --rm --entrypoint "mono TerrariaServer.exe -configpath /var/tshock/config -worldpath /var/tshock/world -logpath /var/tshock/log" tshock
-
+docker run --rm -ti \
+	-p "7777:7777" \
+	-p "7878:7878" \
+	-v config:/tshock/config \
+	-v world:/tshock/world \
+	-v log:/tshock/log \
+	fjfnaranjo/tshock:4.3.26 \
+	mono TerrariaServer.exe -configpath /tshock/config -worldpath /tshock/world -logpath /tshock/log $@
