@@ -15,9 +15,11 @@ then
 	echo "Backup wasn't specified."
 	exit 1
 fi
-if [ ! -d "$1" ]
+if [ ! -d "backups/$1" ]
 then
 	echo "Backup don't exists."
+	echo "Available backups:"
+	ls backups/
 	exit 2
 fi
 
@@ -27,5 +29,5 @@ docker-compose run \
 	--entrypoint "" \
 	-v "`pwd`:/host" \
 	tshock \
-	cp -R "/host/$1" /var/tshock
+	cp -a "/host/backups/$1/." /var/tshock/
 
