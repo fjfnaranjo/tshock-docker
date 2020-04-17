@@ -1,9 +1,11 @@
 version: "3.4"
 services:
   tshock:
-    image: fjfnaranjo/tshock:4.3.25
+    image: fjfnaranjo/tshock:4.3.26
+    build: .
     ports:
-      - "7777"
+      - "7777:7777"
+      - "7878:7878"
     volumes:
       - config:/var/tshock/config
       - world:/var/tshock/world
