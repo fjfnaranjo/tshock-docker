@@ -2,6 +2,11 @@
 
 # Format tShock prefix
 if [ "${TSHOCK_VOL_PREFIX}" != "" ]; then
+	filtered_prefix=$(echo $TSHOCK_VOL_PREFIX | sed 's/[a-zA-Z0-9][a-zA-Z0-9_.-]*/ok/')
+	if [ "${filtered_prefix}" != "ok" ]; then
+		echo "Env var TSHOCK_VOL_PREFIX doesn't have a valid value"
+		exit
+	fi
 	tshock_vol_prefix=$TSHOCK_VOL_PREFIX-
 else
 	tshock_vol_prefix=""
