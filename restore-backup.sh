@@ -3,6 +3,13 @@
 # chdir to script directory
 cd "$(dirname "$0")"
 
+# Format tShock prefix
+if [ "$TSHOCK_VOL_PREFIX" != ""]; then
+	tshock_vol_prefix=$TSHOCK_VOL_PREFIX-
+else
+	tshock_vol_prefix=""
+fi
+
 # Check if backup exists
 if [ "$#" -ne 1 ]
 then
@@ -22,8 +29,8 @@ fi
 # Restore volumes content
 docker run --rm \
 	-v "`pwd`:/host" \
-	-v config:/tshock/config \
-	-v world:/tshock/world \
-	-v log:/tshock/log \
+	-v ${tshock_vol_prefix}config:/tshock/config \
+	-v ${tshock_vol_prefix}world:/tshock/world \
+	-v ${tshock_vol_prefix}log:/tshock/log \
 	fjfnaranjo/tshock:4.3.26 \
 	cp -a "/host/backups/$1/." /tshock/

@@ -3,9 +3,16 @@
 # chdir to this script directory
 cd "$(dirname "$0")"
 
+# Format tShock prefix
+if [ "$TSHOCK_VOL_PREFIX" != ""]; then
+	tshock_vol_prefix=$TSHOCK_VOL_PREFIX-
+else
+	tshock_vol_prefix=""
+fi
+
 # Ensure backup directory
 mkdir -p backups
-BACKUP_NAME=`date -u +'%Y-%m-%d-%H-%M-%S'`
+BACKUP_NAME=${tshock_vol_prefix}`date -u +'%Y-%m-%d-%H-%M-%S'`
 mkdir -p backups/$BACKUP_NAME/config
 mkdir -p backups/$BACKUP_NAME/log
 mkdir -p backups/$BACKUP_NAME/world
