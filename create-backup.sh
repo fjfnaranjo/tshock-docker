@@ -4,7 +4,7 @@
 cd "$(dirname "$0")"
 
 # Format tShock prefix
-if [ "$TSHOCK_VOL_PREFIX" != ""]; then
+if [ "${TSHOCK_VOL_PREFIX}" != "" ]; then
 	tshock_vol_prefix=$TSHOCK_VOL_PREFIX-
 else
 	tshock_vol_prefix=""
