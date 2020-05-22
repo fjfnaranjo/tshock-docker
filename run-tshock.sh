@@ -19,5 +19,5 @@ docker run --rm -ti \
 	-v ${tshock_vol_prefix}config:/tshock/config \
 	-v ${tshock_vol_prefix}world:/tshock/world \
 	-v ${tshock_vol_prefix}log:/tshock/log \
-	fjfnaranjo/tshock:4.3.26 \
+	fjfnaranjo/tshock:4.4.0-pre6 \
 	mono TerrariaServer.exe -configpath /tshock/config -worldpath /tshock/world -logpath /tshock/log $@

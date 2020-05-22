@@ -37,5 +37,5 @@ docker run --rm \
 	-v ${tshock_vol_prefix}config:/tshock/config \
 	-v ${tshock_vol_prefix}world:/tshock/world \
 	-v ${tshock_vol_prefix}log:/tshock/log \
-	fjfnaranjo/tshock:4.3.26 \
+	fjfnaranjo/tshock:4.4.0-pre6 \
 	bash -c "rm -rf /tshock/{config,log,world}/* && cp -a /host/backups/$1/. /tshock/"

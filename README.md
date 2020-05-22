@@ -8,7 +8,7 @@
 ### Set vanilla permissions to group players
 * First, create the group players with the tShock command: /group add players .
 * Stop the server.
-* Run `docker run --rm -ti -v config:/tshock/config fjfnaranjo/tshock:4.3.26 /bin/bash`.
+* Run `docker run --rm -ti -v config:/tshock/config fjfnaranjo/tshock:4.4.0-pre6 /bin/bash`.
 * Then:
 ```
 apt-get update
