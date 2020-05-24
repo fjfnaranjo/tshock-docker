@@ -1,41 +1,36 @@
 #!/bin/sh
 
-# chdir to script directory
-cd "$(dirname "$0")"
-
-# Format tShock prefix
-if [ "${TSHOCK_VOL_PREFIX}" != "" ]; then
-	filtered_prefix=$(echo $TSHOCK_VOL_PREFIX | sed 's/[a-zA-Z0-9][a-zA-Z0-9_.-]*/ok/')
-	if [ "${filtered_prefix}" != "ok" ]; then
-		echo "Env var TSHOCK_VOL_PREFIX doesn't have a valid value"
-		exit
-	fi
-	tshock_vol_prefix=$TSHOCK_VOL_PREFIX-
-else
-	tshock_vol_prefix=""
-fi
-
-# Check if backup exists
-if [ "$#" -ne 1 ]
-then
-	echo "Backup wasn't specified."
-	echo "Available backups:"
-	ls backups/
+# Check if backup specified.
+if [ "$#" -ne 1 ]; then
+	echo "Backup dirname wasn't specified."
+	echo "NOTE: It must be a dirname without symlinks pointing outside of the current directory."
 	exit 1
 fi
-if [ ! -d "backups/$1" ]
-then
-	echo "Backup don't exists."
-	echo "Available backups:"
-	ls backups/
+
+# Check if backup based on root.
+first_char="$(printf '%s' "$1" | cut -c1)"
+if [ "$first_char" = "/" ]; then
+	echo "Backup dirname can't be based on root."
+	echo "NOTE: It must be a dirname without symlinks pointing outside of the current directory."
 	exit 2
 fi
 
-# Restore volumes content
-docker run --rm \
-	-v "`pwd`:/host" \
-	-v ${tshock_vol_prefix}config:/tshock/config \
-	-v ${tshock_vol_prefix}world:/tshock/world \
-	-v ${tshock_vol_prefix}log:/tshock/log \
-	fjfnaranjo/tshock:4.4.0-pre6 \
-	bash -c "rm -rf /tshock/{config,log,world}/* && cp -a /host/backups/$1/. /tshock/"
+# Check if backup looks legit.
+if [ ! -d "/host/$1/config" ]; then
+	echo "Directory $1/config not found. Are you sure its a actual backup?"
+	echo "NOTE: It must be a dirname without symlinks pointing outside of the current directory."
+	exit 3
+fi
+if [ ! -d "/host/$1/log" ]; then
+	echo "Directory $1/log not found. Are you sure its a actual backup?"
+	echo "NOTE: It must be a dirname without symlinks pointing outside of the current directory."
+	exit 4
+fi
+if [ ! -d "/host/$1/world" ]; then
+	echo "Directory $1/world not found. Are you sure its a actual backup?"
+	echo "NOTE: It must be a dirname without symlinks pointing outside of the current directory."
+	exit 5
+fi
+
+# Restore volumes content.
+rm -rf /tshock/{config,log,world}/* && cp -a /host/$1/. /tshock/

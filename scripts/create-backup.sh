@@ -1,46 +1,37 @@
 #!/bin/sh
 
-# chdir to this script directory
-cd "$(dirname "$0")"
-
-# Format tShock prefix
-if [ "${TSHOCK_VOL_PREFIX}" != "" ]; then
-	filtered_prefix=$(echo $TSHOCK_VOL_PREFIX | sed 's/[a-zA-Z0-9][a-zA-Z0-9_.-]*/ok/')
-	if [ "${filtered_prefix}" != "ok" ]; then
-		echo "Env var TSHOCK_VOL_PREFIX doesn't have a valid value"
-		exit
-	fi
-	tshock_vol_prefix=$TSHOCK_VOL_PREFIX-
-else
-	tshock_vol_prefix=""
+# Check if backup specified.
+if [ "$#" -ne 1 ]; then
+	echo "Backup dirname wasn't specified."
+	echo "NOTE: It must be a dirname without symlinks pointing outside of the current directory."
+	exit 1
 fi
 
-# Ensure backup directory
-mkdir -p backups
-BACKUP_NAME=$tshock_vol_prefix`date -u +'%Y-%m-%d-%H-%M-%S'`
-mkdir -p backups/$BACKUP_NAME/config
-mkdir -p backups/$BACKUP_NAME/log
-mkdir -p backups/$BACKUP_NAME/world
+# Check if backup based on root.
+first_char="$(printf '%s' "$1" | cut -c1)"
+if [ "$first_char" = "/" ]; then
+	echo "Backup dirname can't be based on root."
+	echo "NOTE: It must be a dirname without symlinks pointing outside of the current directory."
+	exit 2
+fi
 
-# Do backup
-docker run --rm \
-	-v "`pwd`:/host" \
-	-v ${tshock_vol_prefix}config:/tshock/config \
-	fjfnaranjo/tshock:4.4.0-pre6 \
-	bash -c "cp -a /tshock/config/. /host/backups/$BACKUP_NAME/config/"
-docker run --rm \
-	-v "`pwd`:/host" \
-	-v ${tshock_vol_prefix}log:/tshock/log \
-	fjfnaranjo/tshock:4.4.0-pre6 \
-	bash -c "cp -a /tshock/log/. /host/backups/$BACKUP_NAME/log/"
-docker run --rm \
-	-v "`pwd`:/host" \
-	-v ${tshock_vol_prefix}world:/tshock/world \
-	fjfnaranjo/tshock:4.4.0-pre6 \
-	bash -c "cp -a /tshock/world/. /host/backups/$BACKUP_NAME/world/"
+# Check if backup already exists.
+if [ -d "/host/$1" ]; then
+	echo "Backup dirname already exists."
+	exit 3
+fi
 
-# Ensure regular user permissions for backup
-docker run --rm \
-	-v "`pwd`:/host" \
-	fjfnaranjo/tshock:4.4.0-pre6 \
-	chown -R `id -u`:`id -g` "/host/backups/$BACKUP_NAME"
+# Create backup directories.
+mkdir -p /host/$1/config
+if [ ! -d "/host/$1/config" ]; then
+	echo "There was a problem creating the directory $1/config ."
+	echo "NOTE: It must be a dirname without symlinks pointing outside of the current directory."
+	exit 4
+fi
+mkdir -p /host/$1/log
+mkdir -p /host/$1/world
+
+# Do backup.
+cp -a /tshock/config/. /host/$1/config/
+cp -a /tshock/log/. /host/$1/log/
+cp -a /tshock/world/. /host/$1/world/
