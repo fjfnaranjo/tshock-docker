@@ -13,8 +13,8 @@ RUN \
 	mkdir -p /root/.local/share/Terraria && \
 	ln -s /tshock/world /root/.local/share/Terraria/Worlds && \
 	mkdir -p /tshock/log && \
-	wget https://github.com/Pryaxis/TShock/releases/download/v4.4.0-pre7/TShock.4.4.0.Pre-release.7.Entangled.for.Terraria.1.4.0.4.zip && \
-	unzip TShock.4.4.0.Pre-release.7.Entangled.for.Terraria.1.4.0.4.zip && \
-	rm TShock.4.4.0.Pre-release.7.Entangled.for.Terraria.1.4.0.4.zip
+	wget https://github.com/Pryaxis/TShock/releases/download/v4.4.0-pre8/TShock_4.4.0_Pre8_Terraria1.4.0.4.zip && \
+	unzip TShock_4.4.0_Pre8_Terraria1.4.0.4.zip && \
+	rm TShock_4.4.0_Pre8_Terraria1.4.0.4.zip
 
 ENTRYPOINT ["mono", "TerrariaServer.exe", "-configpath", "/tshock/config", "-logpath", "/tshock/log"]
