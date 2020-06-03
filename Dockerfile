@@ -10,11 +10,9 @@ RUN \
 	rm -rf /var/lib/apt/lists/* /tmp/* && \
 	mkdir -p /tshock/config && \
 	mkdir -p /tshock/world && \
-	mkdir -p /root/.local/share/Terraria && \
-	ln -s /tshock/world /root/.local/share/Terraria/Worlds && \
 	mkdir -p /tshock/log && \
-	wget https://github.com/Pryaxis/TShock/releases/download/v4.4.0-pre8/TShock_4.4.0_Pre8_Terraria1.4.0.4.zip && \
-	unzip TShock_4.4.0_Pre8_Terraria1.4.0.4.zip && \
-	rm TShock_4.4.0_Pre8_Terraria1.4.0.4.zip
+	wget https://github.com/Pryaxis/TShock/releases/download/v4.4-pre10/TShock4.4.0_Pre10_Terraria1.4.0.4.zip && \
+	unzip TShock4.4.0_Pre10_Terraria1.4.0.4.zip && \
+	rm TShock4.4.0_Pre10_Terraria1.4.0.4.zip
 
-ENTRYPOINT ["mono", "TerrariaServer.exe", "-configpath", "/tshock/config", "-logpath", "/tshock/log"]
+ENTRYPOINT ["mono", "TerrariaServer.exe", "-configpath", "/tshock/config", "-worldselectpath", "/tshock/world", "-logpath", "/tshock/log"]
