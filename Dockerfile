@@ -15,9 +15,8 @@ RUN \
 	mkdir -p /tshock/log
 
 RUN \
-	wget https://github.com/Pryaxis/TShock/releases/download/v4.4.0-pre15/TShock4.4.0_Pre15_Terraria1.4.1.2.zip && \
-	unzip TShock4.4.0_Pre15_Terraria1.4.1.2.zip && \
-	mv TShock4.4.0_Pre15_Terraria1.4.1.2/* . && \
-	rm TShock4.4.0_Pre15_Terraria1.4.1.2.zip
+	wget https://github.com/Pryaxis/TShock/releases/download/v4.5.12/TShock4.5.12_Terraria1.4.3.2.zip && \
+	unzip TShock4.5.12_Terraria1.4.3.2.zip && \
+	rm TShock4.5.12_Terraria1.4.3.2.zip
 
 ENTRYPOINT ["mono", "TerrariaServer.exe", "-configpath", "/tshock/config", "-worldselectpath", "/tshock/world", "-logpath", "/tshock/log"]
